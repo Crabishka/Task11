@@ -1,0 +1,24 @@
+    public String regexSolution(String str){ // решение с регуляркой
+        int shift = 0;
+        Pattern pattern = Pattern.compile("\\S+\\s*[=]\\s*\\S+\\s*[+]\\s*[1]");
+        StringBuilder string = new StringBuilder(str);
+        Matcher matcher = pattern.matcher(str);
+        while (matcher.find()) {
+            string.replace(matcher.start() - shift, matcher.end() - shift, fixTheString(str.substring(matcher.start() , matcher.end() )));
+            shift += matcher.end() - matcher.start() - 3 ;
+        }
+        x =x +1 ;
+        y++ ;
+        y= y+1 ;
+        y=y+1 ;
+        return string.toString();
+    }
+
+    public static String fixTheString(String str){  // строка обязательно должна быть "правильной"
+        StringBuilder result = new StringBuilder();
+        String[] parts = str.split("=");
+        result.append(parts[0].trim() + "++");
+        return result.toString();
+
+    }
+}
