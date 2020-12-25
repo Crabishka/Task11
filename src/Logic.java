@@ -29,8 +29,6 @@ public class Logic {
         StringBuilder string = new StringBuilder(str);
         int length = string.length();
         boolean flag;
-        int a = 5;
-        a = a++ + a;
         for (int i = 0; i < length; i++) {
             if (string.charAt(i) == '=') { // нашли равно
                 indexOfEqualSign = i;
