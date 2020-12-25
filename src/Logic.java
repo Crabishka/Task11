@@ -29,6 +29,8 @@ public class Logic {
         StringBuilder string = new StringBuilder(str);
         int length = string.length();
         boolean flag;
+        int a = 5;
+        a = a++ + a;
         for (int i = 0; i < length; i++) {
             if (string.charAt(i) == '=') { // нашли равно
                 indexOfEqualSign = i;
@@ -54,14 +56,17 @@ public class Logic {
                 if (string.charAt(j) != '1') continue;
                 else indexOfEnd = j + 1;
                 j++;
-                if (j == length || string.charAt(j) == '\n' || string.charAt(j) == ' ' || string.charAt(j) == ';')
+                while (j < length && string.charAt(j) == ' ') {          // идем дальше единицы, в поисках закрывающего знака
+                    j++;
+                } // правильнее бы сделать метод, в котором бы хранился массив "закрывающих выражений", но пока не было времени
+                if (j == length || string.charAt(j) == '\n' || string.charAt(j) == ' ' || string.charAt(j) == ';' || string.charAt(j) == ')' || string.charAt(j) == ';' || string.charAt(j) == ',')
                     flag = true;
                 if (j != length && !flag) continue;
                 j = i;
                 while (string.charAt(j) == ' ' || string.charAt(j) == '=' && j > 0) {          // идем назад (влево) и нашли первый непробельный символ
                     j--;
                 }
-                while (j >= 0 && !(string.charAt(j) == '\n' || string.charAt(j) == ' ' || string.charAt(j) == ';')) {          // потом добавляем в firstWord символы до пробела
+                while (j >= 0 && !(string.charAt(j) == '\n' || string.charAt(j) == ' ' || string.charAt(j) == ';' || string.charAt(j) == '(' || string.charAt(j) == ',')) {          // потом добавляем в firstWord символы до пробела
                     if (string.charAt(j) != '=') firstWord.append(string.charAt(j));
                     j--;
                 }
@@ -82,12 +87,12 @@ public class Logic {
 
     public String regexSolution(String str) { // решение с регуляркой
         int shift = 0;
-        Pattern pattern = Pattern.compile("\\S+\\s*[=]\\s*\\S+\\s*[+]\\s*[1]");
+        Pattern pattern = Pattern.compile("\\S+\\s*[=]\\s*\\S+\\s*[+]\\s*[1][\\s;\n]");
         StringBuilder string = new StringBuilder(str);
         Matcher matcher = pattern.matcher(str);
         while (matcher.find()) {
-            string.replace(matcher.start() - shift, matcher.end() - shift, fixTheString(str.substring(matcher.start(), matcher.end())));
-            shift += matcher.end() - matcher.start() - 3;
+            string.replace(matcher.start() - shift, matcher.end() - shift - 1, fixTheString(str.substring(matcher.start(), matcher.end())));
+            shift += matcher.end() - matcher.start() - 4;
         }
         return string.toString();
     }
